@@ -25,7 +25,9 @@
  """
 
 import config as cf
+from time import process_time
 from App import model
+import os
 import csv
 
 """
@@ -41,11 +43,37 @@ recae sobre el controlador.
 # ___________________________________________________
 
 
+def init():
+    init = model.newInit()
+    return init
+
+
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
+def Load_Data(init):
+    decicion = input("Qué archivo desea cargar (small,medium,large) :\n")
+    for filename in os.listdir(cf.data_dir):
+        if filename.endswith(decicion + ".csv"):
+            print("Cargando archivo: " + filename)
+            load(init, filename)
+    return init
 
-# ___________________________________________________
+
+def load(init, direction):
+    fileU = cf.data_dir + direction
+
+    input_file = csv.DictReader(open(fileU, encoding="utf-8"), delimiter=",")
+    for data in input_file:
+        model.req1(init, data)
+    return init
+
+
+# ___________________________________________________|
 #  Funciones para consultas
 # ___________________________________________________
+
+
+def req1(Inite, ranking1, ranking2):
+    return model.req1_return(Inite, ranking1, ranking2)

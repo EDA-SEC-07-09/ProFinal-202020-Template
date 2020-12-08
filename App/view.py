@@ -28,6 +28,7 @@
 import sys
 import config
 from App import controller
+from DISClib.ADT.graph import gr
 from DISClib.ADT import stack
 import timeit
 assert config
@@ -43,6 +44,7 @@ operación seleccionada.
 #  Variables
 # ___________________________________________________
 
+recursionLimit = 1000000
 
 # ___________________________________________________
 #  Menu principal
@@ -51,3 +53,29 @@ operación seleccionada.
 """
 Menu principal
 """
+
+def printMenu():
+    print("Bienvenido")
+    print("1- Inicializar Analyzer")
+    print("2- Cargar información en el Analyzer")
+    print("3- Requerimiento A")
+    print("4- Requerimiento C")
+    print("0- Salir")
+
+while True:
+    printMenu()
+    inputs = input("Seleccione una opcion para continuar:\n")
+    if inputs == "1":
+        analyzer = controller.init()
+    elif inputs == "2":
+        decision = input("Qué archivo desea cargar (small,medium,large) :\n")
+        controller.Load_Data(analyzer,decision)
+        numver=controller.totalCommunities(analyzer)
+        numarc=controller.totalConnections(analyzer)
+        print("Numero de vertices: " + str(numver))
+        print("Numero de arcos: " + str(numarc))
+        sys.setrecursionlimit(recursionLimit)
+        print(gr.vertices(analyzer["Graph"]))
+    else:
+        sys.exit(0)
+sys.exit(0)

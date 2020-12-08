@@ -26,6 +26,7 @@
 
 import config as cf
 from App import model
+import os
 import csv
 
 """
@@ -40,11 +41,36 @@ recae sobre el controlador.
 #  Inicializacion del catalogo
 # ___________________________________________________
 
+def init():
+    init = model.newInit()
+    return init
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
+
+def Load_Data(init,decision):
+    for filename in os.listdir(cf.data_dir):
+        if filename.endswith(decision + ".csv"):
+            print("Cargando archivo: " + filename)
+            load(init, filename)
+    return init
+
+
+def load(init, direction):
+    fileU = cf.data_dir + direction
+    input_file = csv.DictReader(open(fileU, encoding="utf-8"), delimiter=",")
+    for data in input_file:
+        model.addRoute(init,data)
+    return init
+
+def totalConnections(Inite):
+    return model.totalConnections(Inite)
+
+
+def totalCommunities(Inite):
+    return model.totalCommunities(Inite)
 
 # ___________________________________________________
 #  Funciones para consultas

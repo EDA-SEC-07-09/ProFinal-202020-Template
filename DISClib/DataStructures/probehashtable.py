@@ -31,6 +31,7 @@ import config
 from DISClib.DataStructures import mapentry as me
 from DISClib.DataStructures import liststructure as lt
 from DISClib.Utils import error as error
+
 assert config
 
 """
@@ -62,30 +63,32 @@ def newMap(numelements, prime, loadfactor, comparefunction):
         Exception
     """
     try:
-        capacity = nextPrime(numelements//loadfactor)
-        scale = rd.randint(1, prime-1) + 1
+        capacity = nextPrime(numelements // loadfactor)
+        scale = rd.randint(1, prime - 1) + 1
         shift = rd.randint(1, prime)
-        table = lt.newList('ARRAY_LIST', comparefunction)
+        table = lt.newList("ARRAY_LIST", comparefunction)
         for _ in range(capacity):
             entry = me.newMapEntry(None, None)
             lt.addLast(table, entry)
-        hashtable = {'prime': prime,
-                     'capacity': capacity,
-                     'scale': scale,
-                     'shift': shift,
-                     'table': table,
-                     'currentfactor': 0,
-                     'limitfactor': loadfactor,
-                     'comparefunction': comparefunction,
-                     'size': 0,
-                     'type': 'PROBING'}
+        hashtable = {
+            "prime": prime,
+            "capacity": capacity,
+            "scale": scale,
+            "shift": shift,
+            "table": table,
+            "currentfactor": 0,
+            "limitfactor": loadfactor,
+            "comparefunction": comparefunction,
+            "size": 0,
+            "type": "PROBING",
+        }
         return hashtable
     except Exception as exp:
-        error.reraise(exp, 'Probe:newMap')
+        error.reraise(exp, "Probe:newMap")
 
 
 def put(map, key, value):
-    """ Ingresa una pareja llave,valor a la tabla de hash.
+    """Ingresa una pareja llave,valor a la tabla de hash.
     Si la llave ya existe en la tabla, se reemplaza el valor
 
     Args:
@@ -98,23 +101,23 @@ def put(map, key, value):
         Exception
     """
     try:
-        hash = hashValue(map, key)      # Se obtiene el hascode de la llave
+        hash = hashValue(map, key)  # Se obtiene el hascode de la llave
         entry = me.newMapEntry(key, value)
-        pos = findSlot(map, key, hash, map['comparefunction'])
-        lt.changeInfo(map['table'], abs(pos), entry)
-        if (pos < 0):           # Se reemplaza el valor con el nuevo valor
-            map['size'] += 1
-            map['currentfactor'] = map['size'] / map['capacity']
+        pos = findSlot(map, key, hash, map["comparefunction"])
+        lt.changeInfo(map["table"], abs(pos), entry)
+        if pos < 0:  # Se reemplaza el valor con el nuevo valor
+            map["size"] += 1
+            map["currentfactor"] = map["size"] / map["capacity"]
 
-        if (map['currentfactor'] >= map['limitfactor']):
+        if map["currentfactor"] >= map["limitfactor"]:
             rehash(map)
         return map
     except Exception as exp:
-        error.reraise(exp, 'Probe:put')
+        error.reraise(exp, "Probe:put")
 
 
 def contains(map, key):
-    """ Retorna True si la llave key se encuentra en el map
+    """Retorna True si la llave key se encuentra en el map
         o False en caso contrario.
     Args:
         map: El map a donde se guarda la pareja
@@ -127,17 +130,17 @@ def contains(map, key):
     """
     try:
         hash = hashValue(map, key)
-        pos = findSlot(map, key, hash, map['comparefunction'])
-        if (pos > 0):
+        pos = findSlot(map, key, hash, map["comparefunction"])
+        if pos > 0:
             return True
         else:
             return False
     except Exception as exp:
-        error.reraise(exp, 'Probe:contains')
+        error.reraise(exp, "Probe:contains")
 
 
 def get(map, key):
-    """ Retorna la pareja llave, valor, cuya llave sea igual a key
+    """Retorna la pareja llave, valor, cuya llave sea igual a key
     Args:
         map: El map a donde se guarda la pareja
         key: la llave asociada a la pareja
@@ -149,18 +152,18 @@ def get(map, key):
     """
     try:
         hash = hashValue(map, key)
-        pos = findSlot(map, key, hash, map['comparefunction'])
+        pos = findSlot(map, key, hash, map["comparefunction"])
         if pos > 0:
-            element = lt.getElement(map['table'], pos)
+            element = lt.getElement(map["table"], pos)
             return element
         else:
             return None
     except Exception as exp:
-        error.reraise(exp, 'Probe:get')
+        error.reraise(exp, "Probe:get")
 
 
 def remove(map, key):
-    """ Elimina la pareja llave,valor, donde llave == key.
+    """Elimina la pareja llave,valor, donde llave == key.
     Args:
         map: El map a donde se guarda la pareja
         key: la llave asociada a la pareja
@@ -172,18 +175,18 @@ def remove(map, key):
     """
     try:
         hash = hashValue(map, key)
-        pos = findSlot(map, key, hash, map['comparefunction'])
+        pos = findSlot(map, key, hash, map["comparefunction"])
         if pos > 0:
-            entry = me.newMapEntry('__EMPTY__', '__EMPTY__')
-            lt.changeInfo(map['table'], pos, entry)
-            map['size'] -= 1
+            entry = me.newMapEntry("__EMPTY__", "__EMPTY__")
+            lt.changeInfo(map["table"], pos, entry)
+            map["size"] -= 1
         return map
     except Exception as exp:
-        error.reraise(exp, 'Probe:remove')
+        error.reraise(exp, "Probe:remove")
 
 
 def size(map):
-    """  Retorna  el número de entradas en la tabla de hash.
+    """Retorna  el número de entradas en la tabla de hash.
     Args:
         map: El map
     Returns:
@@ -192,13 +195,13 @@ def size(map):
         Exception
     """
     try:
-        return map['size']
+        return map["size"]
     except Exception as exp:
-        error.reraise(exp, 'Probe:size')
+        error.reraise(exp, "Probe:size")
 
 
 def isEmpty(map):
-    """ Informa si la tabla de hash se encuentra vacia
+    """Informa si la tabla de hash se encuentra vacia
     Args:
         map: El map
     Returns:
@@ -209,14 +212,14 @@ def isEmpty(map):
     """
     try:
         empty = True
-        for pos in range(lt.size(map['table'])):
-            entry = lt.getElement(map['table'], pos+1)
-            if (entry['key'] is not None and entry['key'] != '__EMPTY__'):
+        for pos in range(lt.size(map["table"])):
+            entry = lt.getElement(map["table"], pos + 1)
+            if entry["key"] is not None and entry["key"] != "__EMPTY__":
                 empty = False
                 break
         return empty
     except Exception as exp:
-        error.reraise(exp, 'Probe:isEmpty')
+        error.reraise(exp, "Probe:isEmpty")
 
 
 def keySet(map):
@@ -232,13 +235,13 @@ def keySet(map):
     """
     try:
         ltset = lt.newList()
-        for pos in range(lt.size(map['table'])):
-            entry = lt.getElement(map['table'], pos+1)
-            if (entry['key'] is not None and entry['key'] != '__EMPTY__'):
-                lt.addLast(ltset, entry['key'])
+        for pos in range(lt.size(map["table"])):
+            entry = lt.getElement(map["table"], pos + 1)
+            if entry["key"] is not None and entry["key"] != "__EMPTY__":
+                lt.addLast(ltset, entry["key"])
         return ltset
     except Exception as exp:
-        error.reraise(exp, 'Probe:keyset')
+        error.reraise(exp, "Probe:keyset")
 
 
 def valueSet(map):
@@ -253,14 +256,14 @@ def valueSet(map):
         Exception
     """
     try:
-        ltset = lt.newList()
-        for pos in range(lt.size(map['table'])):
-            entry = lt.getElement(map['table'], pos+1)
-            if (entry['value'] is not None and entry['value'] != '__EMPTY__'):
-                lt.addLast(ltset, entry['value'])
+        ltset = lt.newList("ARRAY_LIST")
+        for pos in range(lt.size(map["table"])):
+            entry = lt.getElement(map["table"], pos + 1)
+            if entry["value"] is not None and entry["value"] != "__EMPTY__":
+                lt.addLast(ltset, entry["value"])
         return ltset
     except Exception as exp:
-        error.reraise(exp, 'Probe:valueset')
+        error.reraise(exp, "Probe:valueset")
 
 
 # __________________________________________________________________
@@ -278,15 +281,15 @@ def hashValue(table, key):
     a y b enteros aleatoreos dentro del intervalo [0,p-1], con a>0
     """
     try:
-        h = (hash(key))
-        a = table['scale']
-        b = table['shift']
-        p = table['prime']
-        m = table['capacity']
-        value = int((abs(h*a + b) % p) % m + 1)
+        h = hash(key)
+        a = table["scale"]
+        b = table["shift"]
+        p = table["prime"]
+        m = table["capacity"]
+        value = int((abs(h * a + b) % p) % m + 1)
         return value
     except Exception as exp:
-        error.reraise(exp, 'Probe:hashvalue')
+        error.reraise(exp, "Probe:hashvalue")
 
 
 def findSlot(map, key, hashvalue, comparefunction):
@@ -298,26 +301,26 @@ def findSlot(map, key, hashvalue, comparefunction):
     comparefunction: funcion de comparación para la búsqueda de la llave
     """
     try:
-        avail = -1          # no se ha encontrado una posición aun
+        avail = -1  # no se ha encontrado una posición aun
         searchpos = 0
-        table = map['table']
-        while (searchpos != hashvalue):  # Se busca una posición
-            if (searchpos == 0):
+        table = map["table"]
+        while searchpos != hashvalue:  # Se busca una posición
+            if searchpos == 0:
                 searchpos = hashvalue
             if isAvailable(table, searchpos):  # La posición esta disponible
                 element = lt.getElement(table, searchpos)
-                if (avail == -1):
-                    avail = searchpos            # primera posición disponible
-                if element['key'] is None:       # nunca ha sido utilizada
+                if avail == -1:
+                    avail = searchpos  # primera posición disponible
+                if element["key"] is None:  # nunca ha sido utilizada
                     break
-            else:                    # la posicion no estaba disponible
+            else:  # la posicion no estaba disponible
                 element = lt.getElement(table, searchpos)
                 if comparefunction(key, element) == 0:  # Es la llave
-                    return searchpos               # Se  retorna la posicion
-            searchpos = (((searchpos) % map['capacity'])+1)
-        return -(avail)    # numero negativo indica que el elemento no estaba
+                    return searchpos  # Se  retorna la posicion
+            searchpos = ((searchpos) % map["capacity"]) + 1
+        return -(avail)  # numero negativo indica que el elemento no estaba
     except Exception as exp:
-        error.reraise(exp, 'Probe:findslot')
+        error.reraise(exp, "Probe:findslot")
 
 
 def isAvailable(table, pos):
@@ -329,11 +332,11 @@ def isAvailable(table, pos):
     """
     try:
         entry = lt.getElement(table, pos)
-        if (entry['key'] is None or entry['key'] == '__EMPTY__'):
+        if entry["key"] is None or entry["key"] == "__EMPTY__":
             return True
         return False
     except Exception as exp:
-        error.reraise(exp, 'Probe:isAvailable')
+        error.reraise(exp, "Probe:isAvailable")
 
 
 def rehash(map):
@@ -342,28 +345,28 @@ def rehash(map):
     todos los elementos de la tabla.
     """
     try:
-        newtable = lt.newList('ARRAY_LIST', map['comparefunction'])
-        capacity = nextPrime(map['capacity']*2)
+        newtable = lt.newList("ARRAY_LIST", map["comparefunction"])
+        capacity = nextPrime(map["capacity"] * 2)
         for _ in range(capacity):
             entry = me.newMapEntry(None, None)
             lt.addLast(newtable, entry)
-        oldtable = map['table']
-        map['size'] = 0
-        map['currentfactor'] = 0
-        map['table'] = newtable
-        map['capacity'] = capacity
+        oldtable = map["table"]
+        map["size"] = 0
+        map["currentfactor"] = 0
+        map["table"] = newtable
+        map["capacity"] = capacity
         for pos in range(lt.size(oldtable)):
-            entry = lt.getElement(oldtable, pos+1)
-            if (entry['key'] is not None and entry['key'] != '__EMPTY__'):
-                hash = hashValue(map, entry['key'])
-                pos = findSlot(map, entry['key'], hash, map['comparefunction'])
-                lt.changeInfo(map['table'], abs(pos), entry)
-                if (pos < 0):
-                    map['size'] += 1
-                    map['currentfactor'] = map['size'] / map['capacity']
+            entry = lt.getElement(oldtable, pos + 1)
+            if entry["key"] is not None and entry["key"] != "__EMPTY__":
+                hash = hashValue(map, entry["key"])
+                pos = findSlot(map, entry["key"], hash, map["comparefunction"])
+                lt.changeInfo(map["table"], abs(pos), entry)
+                if pos < 0:
+                    map["size"] += 1
+                    map["currentfactor"] = map["size"] / map["capacity"]
         return map
     except Exception as exp:
-        error.reraise(exp, 'Probe:rehash')
+        error.reraise(exp, "Probe:rehash")
 
 
 # Function that returns True if n
@@ -373,16 +376,16 @@ def rehash(map):
 
 def isPrime(n):
     # Corner cases
-    if(n <= 1):
+    if n <= 1:
         return False
-    if(n <= 3):
+    if n <= 3:
         return True
 
-    if(n % 2 == 0 or n % 3 == 0):
+    if n % 2 == 0 or n % 3 == 0:
         return False
 
     for i in range(5, int(math.sqrt(n) + 1), 6):
-        if(n % i == 0 or n % (i + 2) == 0):
+        if n % i == 0 or n % (i + 2) == 0:
             return False
 
     return True
@@ -393,14 +396,14 @@ def isPrime(n):
 # # This code is contributed by Sanjit_Prasad
 def nextPrime(N):
     # Base case
-    if (N <= 1):
+    if N <= 1:
         return 2
     prime = int(N)
     found = False
     # Loop continuously until isPrime returns
     # True for a number greater than n
-    while(not found):
+    while not found:
         prime = prime + 1
-        if(isPrime(prime) is True):
+        if isPrime(prime) is True:
             found = True
     return int(prime)

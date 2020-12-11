@@ -67,13 +67,25 @@ def load(init, direction):
     input_file = csv.DictReader(open(fileU, encoding="utf-8"), delimiter=",")
     for data in input_file:
         model.req1(init, data)
+        model.add_to_map(init, data)
     return init
 
 
 # ___________________________________________________|
 #  Funciones para consultas
 # ___________________________________________________
+def intento1(Inite, hora_inicio, hora_final, estacion1, estacion2):
+    ewe = model.intento1(Inite, hora_inicio, hora_final, estacion1, estacion2)
+    return ewe
 
 
 def req1(Inite, ranking1, ranking2):
     return model.req1_return(Inite, ranking1, ranking2)
+
+
+def req2(Inite, fecha, top):
+    return model.consulta_puntos_PROV(Inite, fecha, top)
+
+
+def req2B(Inite, fecha_ini, fecha_fin, top2):
+    return model.consulta2(Inite, fecha_ini, fecha_fin, top2)

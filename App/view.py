@@ -28,6 +28,8 @@
 import sys
 import config
 from App import controller
+
+from time import process_time
 from DISClib.ADT import list as lt
 from DISClib.ADT import stack
 import timeit
@@ -61,6 +63,7 @@ def printMenu():
     print("2- Cargar información en el Analyzer")
     print("3- REQUERIMENTO 1")
     print("4- REQUERIMENTO 2")
+    print("5- REQUERIMENTO 2B")
     print("0- Salir")
 
 
@@ -70,7 +73,10 @@ while True:
     if inputs == "1":
         analyzer = controller.init()
     elif inputs == "2":
+        a_ver = process_time()
         controller.Load_Data(analyzer)
+        a_ver2 = process_time()
+        print(a_ver2 - a_ver)
     elif inputs == "3":
         ranking1 = int(
             input(
@@ -98,7 +104,8 @@ while True:
         for i in range(1, lt.size(ranking1_) + 1):
             cont += 1
             elemento = lt.getElement(ranking1_, i)
-            print(cont, elemento["company"], ":", lt.size(elemento["value"]))
+            print(cont, elemento["company"], ":", len(elemento["value"]))
+
         print("------------------------------")
         print("El top:", ranking2, "de compañias que más servicios prestaron.")
         print("------------------------------")
@@ -107,11 +114,49 @@ while True:
         for i in range(1, lt.size(ranking2_) + 1):
             cont += 1
             elemento = lt.getElement(ranking2_, i)
-            print(cont, elemento["company"], ":", elemento["value"])
+            print(cont, elemento["company"], ":", elemento["servicios"])
         print("------------------------------")
 
     elif inputs == "4":
-        pass
+        print("-----------------------PARTE A----------------------------------")
+        fecha = input(
+            "Digite la fecha en la cuál desea saber su ranking (Formato: AAAA-MM-DD) \n:"
+        )
+        top = int(input("Digite el top que desea para la consulta anterior\n:"))
+
+        xd = controller.req2(analyzer, fecha, top)
+
+        print("--------------------------------------------------------")
+        print("Top:", top, "taxis registrados en:", fecha)
+        print("--------------------------------------------------------")
+        cont = 0
+        ranking2_ = xd
+        for i in range(1, lt.size(ranking2_) + 1):
+            cont += 1
+            elemento = lt.getElement(ranking2_, i)
+            print(cont, elemento["taxi"], ":", elemento["puntos"])
+    elif inputs == "5":
+        print("-----------------------PARTE B----------------------------------")
+        fecha_ini = input(
+            "Digite la fecha inicial en la cuál desea comenzar para hacer su ranking (Formato: AAAA-MM-DD) \n:"
+        )
+        fecha_fin = input(
+            "Digite la fecha final en la cuál desea comenzar para hacer su ranking (Formato: AAAA-MM-DD) \n:"
+        )
+        top2 = int(input("Digite el top que desea para la consulta anterior\n:"))
+
+        print("--------------------------------------------------------")
+        print("Top:", top2, "taxis registrados entre:", fecha_ini, "y", fecha_fin)
+        print("--------------------------------------------------------")
+        xd = controller.req2B(analyzer, fecha_ini, fecha_fin, top2)
+        cont = 0
+        ranking2_ = xd
+        for i in range(1, lt.size(ranking2_) + 1):
+            cont += 1
+            elemento = lt.getElement(ranking2_, i)
+            print(cont, elemento["taxi"], ":", elemento["puntos"])
+        print("--------------------------------------------------------")
+
     else:
         sys.exit(0)
 sys.exit(0)

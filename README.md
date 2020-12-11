@@ -1,3 +1,7 @@
+*Santiago Prieto Álvarez 202013173 s.prietoa@uniandes.edu.co 
+
+*Brian Manuel Rivera Hernández 202015320  b.riverah@uniandes.edu.co
+
 #ISIS1225 - Estructura de un proyecto
 
 Este proyecto busca mostrar una posible forma de organizar el código que se va a desarrollar en los proyectos del curso.

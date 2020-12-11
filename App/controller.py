@@ -75,3 +75,6 @@ def totalCommunities(Inite):
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
+
+def MejorHorario(Inite,h1,h2,c1,c2):
+    return model.MejorHorario(Inite,h1,h2,c1,c2)

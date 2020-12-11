@@ -31,6 +31,7 @@ from App import controller
 from DISClib.ADT.graph import gr
 from DISClib.ADT import stack
 import timeit
+import time
 assert config
 
 """
@@ -70,12 +71,15 @@ while True:
     elif inputs == "2":
         decision = input("Qué archivo desea cargar (small,medium,large) :\n")
         controller.Load_Data(analyzer,decision)
-        numver=controller.totalCommunities(analyzer)
-        numarc=controller.totalConnections(analyzer)
-        print("Numero de vertices: " + str(numver))
-        print("Numero de arcos: " + str(numarc))
+    elif inputs == "4":
         sys.setrecursionlimit(recursionLimit)
-        print(gr.vertices(analyzer["Graph"]))
+        hora1 = input("Ingrese la hora de inicio:")
+        hora2 = input("Ingrese la hora de final:")
+        com1 = input("Ingrese la community area inicial:")
+        com2 = input("Ingrese la community area final:")
+        c1=com1+".0"
+        c2=com2+".0"
+        print(controller.MejorHorario(analyzer,hora1,hora2,c1,c2))
     else:
         sys.exit(0)
 sys.exit(0)

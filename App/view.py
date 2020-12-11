@@ -28,7 +28,7 @@
 import sys
 import config
 from App import controller
-
+import time
 from time import process_time
 from DISClib.ADT import list as lt
 from DISClib.ADT import stack
@@ -47,6 +47,7 @@ operación seleccionada.
 #  Variables
 # ___________________________________________________
 
+recursionLimit = 1000000
 
 # ___________________________________________________
 #  Menu principal
@@ -64,6 +65,7 @@ def printMenu():
     print("3- REQUERIMENTO 1")
     print("4- REQUERIMENTO 2")
     print("5- REQUERIMENTO 2B")
+    print("6- REQUERIMENTO 3")
     print("0- Salir")
 
 
@@ -74,7 +76,8 @@ while True:
         analyzer = controller.init()
     elif inputs == "2":
         a_ver = process_time()
-        controller.Load_Data(analyzer)
+        decision = input("Qué archivo desea cargar (small,medium,large) :\n")
+        controller.Load_Data(analyzer, decision)
         a_ver2 = process_time()
         print(a_ver2 - a_ver)
     elif inputs == "3":
@@ -156,6 +159,18 @@ while True:
             elemento = lt.getElement(ranking2_, i)
             print(cont, elemento["taxi"], ":", elemento["puntos"])
         print("--------------------------------------------------------")
+    elif inputs == "6":
+        sys.setrecursionlimit(recursionLimit)
+        hora1 = input("Ingrese la hora de inicio:")
+        hora2 = input("Ingrese la hora de final:")
+        com1 = input("Ingrese la community area inicial:")
+        com2 = input("Ingrese la community area final:")
+        c1 = com1 + ".0"
+        c2 = com2 + ".0"
+        t1 = time.process_time()
+        print(controller.MejorHorario(analyzer, hora1, hora2, c1, c2))
+        t2 = time.process_time()
+        print(t2 - t1)
 
     else:
         sys.exit(0)

@@ -52,10 +52,9 @@ def init():
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
-def Load_Data(init):
-    decicion = input("Qué archivo desea cargar (small,medium,large) :\n")
+def Load_Data(init, decision):
     for filename in os.listdir(cf.data_dir):
-        if filename.endswith(decicion + ".csv"):
+        if filename.endswith(decision + ".csv"):
             print("Cargando archivo: " + filename)
             load(init, filename)
     return init
@@ -68,7 +67,16 @@ def load(init, direction):
     for data in input_file:
         model.req1(init, data)
         model.add_to_map(init, data)
+        model.addRoute(init, data)
     return init
+
+
+def totalConnections(Inite):
+    return model.totalConnections(Inite)
+
+
+def totalCommunities(Inite):
+    return model.totalCommunities(Inite)
 
 
 # ___________________________________________________|
@@ -77,6 +85,10 @@ def load(init, direction):
 def intento1(Inite, hora_inicio, hora_final, estacion1, estacion2):
     ewe = model.intento1(Inite, hora_inicio, hora_final, estacion1, estacion2)
     return ewe
+
+
+def MejorHorario(Inite, h1, h2, c1, c2):
+    return model.MejorHorario(Inite, h1, h2, c1, c2)
 
 
 def req1(Inite, ranking1, ranking2):

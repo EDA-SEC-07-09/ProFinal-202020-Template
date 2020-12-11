@@ -31,7 +31,7 @@ from App import controller
 from DISClib.ADT.graph import gr
 from DISClib.ADT import stack
 import timeit
-import time
+import time 
 assert config
 
 """
@@ -79,7 +79,10 @@ while True:
         com2 = input("Ingrese la community area final:")
         c1=com1+".0"
         c2=com2+".0"
+        t1=time.process_time()
         print(controller.MejorHorario(analyzer,hora1,hora2,c1,c2))
+        t2=time.process_time()
+        print(t2-t1)
     else:
         sys.exit(0)
 sys.exit(0)

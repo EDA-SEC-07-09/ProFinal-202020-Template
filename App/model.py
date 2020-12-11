@@ -122,7 +122,6 @@ def totalCommunities(Inite):
     return gr.numVertices(Inite["Graph"])
 
 
-
 def MejorHorario(Inite,h1,h2,c1,c2):
     ho1=datetime.datetime.strptime(h1,"%H:%M")
     ho2=datetime.datetime.strptime(h2,"%H:%M")
@@ -139,7 +138,7 @@ def MejorHorario(Inite,h1,h2,c1,c2):
         element=it.next(iterator)
         conversor=datetime.datetime.strptime(element,"%H:%M")
         alarm=False
-        if ho1<=conversor<=ho2 and ho1<=ho2:
+        if ho1<=conversor<=ho2:
             buscar=c1+"-"+element 
             dijk=djk.Dijkstra(Inite["Graph"],buscar)
             element2=element
@@ -177,7 +176,7 @@ def MejorHorario(Inite,h1,h2,c1,c2):
                         hora2=element2
                         costo_menor=costo
                         ruta=path
-                        i_max=i
+                    i_max=i
                     alarm=True
                 if element2=="23:45":
                     i_max=i
